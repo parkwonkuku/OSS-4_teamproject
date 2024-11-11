@@ -175,6 +175,7 @@
     }
 
     loadingBar.style.display = "block";
+<<<<<<< HEAD
 
     var script = document.createElement("script");
     script.src = loaderUrl;
@@ -196,3 +197,26 @@
 </body>
 
 </html>
+=======
+
+    var script = document.createElement("script");
+    script.src = loaderUrl;
+    script.onload = () => {
+      createUnityInstance(canvas, config, (progress) => {
+        progressBarFull.style.width = 100 * progress + "%";
+      }).then((unityInstance) => {
+        loadingBar.style.display = "none";
+        fullscreenButton.onclick = () => {
+          unityInstance.SetFullscreen(1);
+        };
+      }).catch((message) => {
+        alert(message);
+      });
+    };
+
+    document.body.appendChild(script);
+  </script>
+</body>
+
+</html>
+>>>>>>> 16e222345ce181d678e5b23480e87d806fab6a9f
