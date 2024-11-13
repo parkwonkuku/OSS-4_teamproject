@@ -17,26 +17,24 @@
       padding: 0;
       display: flex;
       flex-direction: column;
+      /* 세로 방향으로 레이아웃 설정 */
       align-items: center;
       justify-content: flex-start;
+      /* 화면 상단에서부터 시작 */
       height: auto;
+      /* 페이지 높이가 콘텐츠에 맞게 조정 */
       min-height: 100vh;
+      /* 최소한 화면을 채우도록 설정 */
       overflow-y: auto;
+      /* 세로 스크롤 허용 */
     }
 
-    #web-title {
-      width: 100%;
-      max-width: 900px;
-      padding: 10px;
-      margin-top: 10px;
-    }
-
+    /* Unity 컨테이너 스타일 */
     #unity-container {
       position: relative;
       width: 100%;
       max-width: 900px;
       margin: auto;
-      margin-top: 10px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -51,6 +49,7 @@
       aspect-ratio: 16 / 9;
     }
 
+    /* 로딩 바 스타일 */
     #unity-loading-bar {
       width: 80%;
       text-align: center;
@@ -70,6 +69,7 @@
       width: 0%;
     }
 
+    /* 경고 배너 스타일 */
     #unity-warning {
       width: 100%;
       text-align: center;
@@ -77,25 +77,29 @@
       font-size: 0.9em;
     }
 
+    /* 푸터 스타일 */
     #unity-footer {
       display: flex;
-      justify-content: center;
+      align-items: left;
+      justify-content: left;
       width: 95%;
       padding: 10px;
       background-color: #2c2c3c;
       border-radius: 8px;
-      margin-top: 8px;
+      margin-top: 10px;
     }
 
     #unity-build-title {
       font-size: 1.2em;
       font-weight: bold;
+      text-align: left;
     }
 
+    /* 버튼 스타일 */
     #unity-fullscreen-button {
       position: absolute;
       right: 20px;
-      bottom: 9px;
+      bottom: 10px;
       background-color: #007bff;
       padding: 5px 10px;
       color: white;
@@ -112,6 +116,71 @@
 
     #unity-fullscreen-button img:hover {
       transform: scale(1.1);
+    }
+
+    /* 댓글 섹션 스타일 */
+    #comment-section {
+      width: 100%;
+      max-width: 900px;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: #2c2c3c;
+      border-radius: 8px;
+    }
+
+    #comment-form {
+      display: flex;
+      flex-direction: column;
+    }
+
+    #comment-input {
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #555;
+      color: #fff;
+      border-radius: 5px;
+      border: none;
+      resize: none;
+      min-height: 80px;
+    }
+
+    #comment-button {
+      padding: 10px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    #comment-button:hover {
+      background-color: #0056b3;
+    }
+
+    #comment-list {
+      margin-top: 10px;
+    }
+
+    .comment {
+      padding: 10px;
+      background-color: #444;
+      margin-bottom: 10px;
+      border-radius: 5px;
+    }
+
+    .comment-author {
+      font-weight: bold;
+    }
+
+    .comment-text {
+      margin-top: 5px;
+    }
+
+    #web-title {
+      width: 100%;
+      max-width: 900px;
+      padding: 20px;
+      border-radius: 8px;
     }
 
     /* 게임 설명란 스타일 */
@@ -154,26 +223,26 @@
 <body>
   <!-- title -->
   <div id="web-title">
-    <h1>주니어 광운</h1>
+    <h1 style="color: white;">Welcome, Please enjoy the game!</h1>
   </div>
-
   <!-- 게임 화면 -->
   <div id="unity-container" class="unity-desktop">
     <canvas id="unity-canvas" width="900" height="506" tabindex="-1"></canvas>
-    <button type="button" id="unity-fullscreen-button">
-      <i class="bi bi-arrows-fullscreen"></i>
-    </button>
     <div id="unity-loading-bar">
+      <div id="unity-logo"></div>
       <div id="unity-progress-bar-empty">
         <div id="unity-progress-bar-full"></div>
       </div>
     </div>
     <div id="unity-warning"> </div>
     <div id="unity-footer">
-      <div id="unity-build-title">Fly Pang Pang</div>
+      <div id="unity-build-title">Fly Pang Pang!
+        <button type="button" id="unity-fullscreen-button">
+          <i class="bi bi-arrows-fullscreen"></i>
+        </button>
+      </div>
     </div>
   </div>
-
   <!-- 게임 설명란 -->
   <div id="game-description">
     <h3>게임 설명</h3>
@@ -185,12 +254,24 @@
     <p style="margin-top: 20px;"></p>
     <p style="font-size: 13px;">게임 플레이 하는 법은 게임 내 <b>'Help'</b> 를 참고해주세요!</p>
   </div>
+  <!-- 댓글 섹션 -->
+  <div id="comment-section">
+    <h2 style="color: white;">Comments</h2>
+    <form id="comment-form">
+      <textarea id="comment-input" placeholder="Write a comment..."></textarea>
+      <button type="button" id="comment-button">Add Comment</button>
+    </form>
+
+    <h3>comments</h3>
+    <div id="comment-list"></div>
+  </div>
 
   <!-- 페이지 하단 -->
   <footer id="footer">
     <p>© 2024 오픈소스 4조</p>
     <p>© 주니어 광운 Fly Pang Pang.</p>
   </footer>
+
   <script>
     var container = document.querySelector("#unity-container");
     var canvas = document.querySelector("#unity-canvas");
@@ -260,6 +341,38 @@
     };
 
     document.body.appendChild(script);
+
+    // 댓글 관련 변수
+    var commentInput = document.querySelector("#comment-input");
+    var commentButton = document.querySelector("#comment-button");
+    var commentList = document.querySelector("#comment-list");
+
+    // 댓글 추가 함수
+    function addComment(text) {
+      var commentDiv = document.createElement("div");
+      commentDiv.classList.add("comment");
+
+      var author = document.createElement("div");
+      author.classList.add("comment-author");
+      author.innerText = "anonymity"; // 댓글 작성자 이름
+
+      var commentText = document.createElement("div");
+      commentText.classList.add("comment-text");
+      commentText.innerText = text;
+
+      commentDiv.appendChild(author);
+      commentDiv.appendChild(commentText);
+      commentList.appendChild(commentDiv);
+    }
+
+    // 댓글 작성 버튼 클릭 시 실행되는 함수
+    commentButton.onclick = function () {
+      var commentText = commentInput.value.trim();
+      if (commentText) {
+        addComment(commentText);
+        commentInput.value = ""; // 댓글 입력창 초기화
+      }
+    };;
   </script>
 </body>
 
