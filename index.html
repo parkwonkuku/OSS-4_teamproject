@@ -153,6 +153,16 @@
       resize: none;
     }
 
+    .delete-btn {
+      background-color: transparent;
+      border: none;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      text-decoration: underline;
+    }
+
     /* 게임 설명란 스타일 */
     #game-description-footer {
       display: flex;
@@ -225,6 +235,10 @@
 
     body.dark-mode #footer {
       border-top-color: #555;
+    }
+
+    body.dark-mode .delete-btn {
+      color: #ddd;
     }
 
     #mode-toggle-button {
@@ -395,6 +409,7 @@
     commentButton.onclick = function () {
       var userName = usernameInput.value.trim();
       var commentText = commentInput.value.trim();
+
       if (userName && commentText) {
         if (!localStorage.getItem('username')) {
           localStorage.setItem('username', userName);
@@ -402,6 +417,7 @@
         addComment(userName, commentText);
         commentInput.value = "";
         usernameInput.value = "";
+        updateComments();
       }
     };
 
@@ -410,24 +426,52 @@
       var commentDiv = document.createElement("div");
       commentDiv.classList.add("comment");
 
-      var author = document.createElement("div");
-      author.classList.add("comment-author");
-      author.innerText = name; // 댓글 작성자 이름
-      commentDiv.appendChild(author);
+      var commentContentDiv = document.createElement("div");
+      commentContentDiv.classList.add("d-flex", "justify-content-between", "align-items-center");
 
+      var user = document.createElement("div");
+      user.classList.add("comment-user");
+      user.innerText = name; // 댓글 작성자 이름
+      commentContentDiv.appendChild(user);
+
+      let buttonRemove = document.createElement("button");
+      buttonRemove.classList.add("delete-btn")
+      buttonRemove.textContent = "삭제";
+      commentContentDiv.appendChild(buttonRemove);
+
+      commentDiv.appendChild(commentContentDiv);
 
       let span = document.createElement("span");
-      span.classList.add("me-auto");
-      span.textContent = text;
+      span.classList.add("d-flex", "justify-content-between", "align-items-center");
       commentDiv.appendChild(span);
+      span.textContent = text;
 
-      const currentUser = localStorage.getItem('username');
-      if (name === currentUser) {
-        commentDiv.style.backgroundColor = "#e6f7ff"; // 본인 댓글 강조
-      }
+      buttonRemove.addEventListener("click", () => {
+        commentDiv.remove();
+        updateComments();
+      })
 
       commentList.appendChild(commentDiv);
     }
+
+    function updateComments() {
+      var allComments = [];
+      document.querySelectorAll(".comment").forEach(commentDiv => {
+        var userName = commentDiv.querySelector(".comment-user").innerText;
+        var commentText = commentDiv.querySelector("span").textContent;
+        allComments.push({ user: userName, text: commentText });
+      });
+      localStorage.setItem("comments", JSON.stringify(allComments));
+    }
+
+    function loadComments() {
+      var savedComments = JSON.parse(localStorage.getItem("comments")) || [];
+      savedComments.forEach(comment => {
+        addComment(comment.user, comment.text);
+      });
+    }
+
+    window.onload = loadComments;
   </script>
 </body>
 
