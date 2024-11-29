@@ -43,6 +43,7 @@
 
     #web-title h1 {
       font-weight: bold;
+      margin: 0;
     }
 
     /* Unity 컨테이너 스타일 */
@@ -251,6 +252,12 @@
       border: none;
       font-size: 0.8em;
     }
+
+    .navbar-logo {
+      width: 50px;
+      height: auto;
+      margin-right: 10px;
+    }
   </style>
 </head>
 
@@ -258,8 +265,10 @@
   <!-- title -->
   <div id="web-title">
     <h1 style="margin-top: 10px;">
-      <span style="color: #569EFF;">쥬</span><span style="color: #FF4F62;">니</span><span style="color: #49DB8A;">어</span>
-      <span style="color: #892A35;">광운</span>
+      <div class="logo-container" style="display: flex; align-items: center;">
+        <img src="./image/character1.png" alt="Character Image" class="navbar-logo" />
+        <span style="color: #569EFF;">팡</span><span style="color: #FF4F62;">팡</span><span
+          style="color: #49DB8A;">랜</span><span style="color: #892A35;">드</span>
     </h1>
     <button type="button" id="mode-toggle-button" style="font-size: 2em;">
       <i class="bi bi-moon-fill"></i>
